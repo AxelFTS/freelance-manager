@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: freelance-postgres
+    environment:
+      POSTGRES_USER: axel
+      POSTGRES_PASSWORD: axel123
+      POSTGRES_DB: freelance_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/postgres_data
+
+volumes:
+  postgres_data:
