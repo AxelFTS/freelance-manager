@@ -2,11 +2,7 @@
   <app-header (menuClick)="toggleSidenav()"></app-header>
 
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav
-      [mode]="(isDesktop$ | async) ? 'side' : 'over'"
-      [opened]="isDesktop$ | async"
-      #sideNav
-    >
+    <mat-sidenav mode="side" [opened]="isDesktop$ | async" #sideNav>
       <app-sidebar></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content>

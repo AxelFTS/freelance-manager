@@ -7,7 +7,11 @@
 .sidenav-container {
   flex: 1;
   height: 100%;
+}
+
+mat-sidenav {
   width: 180px;
+  border-radius: 0;
 }
 
 .main-content {
