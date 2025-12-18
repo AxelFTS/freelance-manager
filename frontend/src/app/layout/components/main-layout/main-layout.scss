@@ -1,0 +1,15 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidenav-container {
+  flex: 1;
+  height: 100%;
+  width: 180px;
+}
+
+.main-content {
+  padding: 20px;
+}

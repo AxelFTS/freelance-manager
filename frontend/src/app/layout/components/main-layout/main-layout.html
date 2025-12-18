@@ -1,0 +1,18 @@
+<div class="main-layout">
+  <app-header (menuClick)="toggleSidenav()"></app-header>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      [mode]="(isDesktop$ | async) ? 'side' : 'over'"
+      [opened]="isDesktop$ | async"
+      #sideNav
+    >
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
