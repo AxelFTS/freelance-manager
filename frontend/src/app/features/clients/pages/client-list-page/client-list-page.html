@@ -1,1 +1,76 @@
-<p>client-list-page works!</p>
+<div class="client-list-container">
+  <!-- Header avec titre et bouton Nouveau client -->
+  <div class="header">
+    <h1>Liste des clients</h1>
+    <button mat-raised-button color="primary" (click)="newClient()">
+      <mat-icon>add</mat-icon>
+      Nouveau client
+    </button>
+  </div>
+
+  <!-- Material Table avec tri et pagination -->
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Colonne Nom -->
+    <ng-container matColumnDef="nom">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+      <td mat-cell *matCellDef="let client">{{ client.nom }}</td>
+    </ng-container>
+
+    <!-- Colonne Email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let client">{{ client.email }}</td>
+    </ng-container>
+
+    <!-- Colonne Téléphone -->
+    <ng-container matColumnDef="telephone">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Téléphone</th>
+      <td mat-cell *matCellDef="let client">{{ client.telephone || "-" }}</td>
+    </ng-container>
+
+    <!-- Colonne Date de création -->
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Date de création
+      </th>
+      <td mat-cell *matCellDef="let client">
+        {{ client.createdAt | date : "dd/MM/yyyy" }}
+      </td>
+    </ng-container>
+
+    <!-- Colonne Actions (modifier, supprimer) -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let client">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="editClient(client.id)"
+          aria-label="Modifier"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteClient(client.id)"
+          aria-label="Supprimer"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Définition des lignes du tableau -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <!-- Paginator pour la pagination -->
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    showFirstLastButtons
+    aria-label="Sélectionner une page"
+  >
+  </mat-paginator>
+</div>

@@ -1,0 +1,14 @@
+.client-list-container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+mat-paginator {
+  margin-top: 10px;
+}
