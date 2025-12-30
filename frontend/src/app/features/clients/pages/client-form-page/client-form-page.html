@@ -1,1 +1,39 @@
-<p>client-form-page works!</p>
+<span>{{ isEditMode ? "Modifier votre client" : "Créer votre client" }} </span>
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input matInput formControlName="nom" required />
+    @if (nom?.hasError('required') && nom?.touched){
+    <mat-error>Le nom est obligatoire</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" />
+    @if (email?.hasError('email') && email?.touched) {
+    <mat-error>Format email invalide</mat-error>
+    } @if (email?.hasError('required') && email?.touched) {
+    <mat-error>L'email est obligatoire</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Téléphone</mat-label>
+    <input matInput formControlName="telephone" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Adresse</mat-label>
+    <input matInput formControlName="adresse" />
+  </mat-form-field>
+
+  <div>
+    <button matButton="tonal" type="submit" [disabled]="clientForm.invalid">
+      {{ isEditMode ? "Modifier" : "Créer" }}
+    </button>
+    <button matButton="tonal" type="button" (click)="onCancel()">
+      Annuler
+    </button>
+  </div>
+</form>
