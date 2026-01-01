@@ -13,7 +13,8 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Client } from '../../models/client.model';
-import { ClientService } from '../../../../core/services/client.services';
+import { ClientService } from '../../../../core/services/client.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-client-list-page',
@@ -31,6 +32,7 @@ import { ClientService } from '../../../../core/services/client.services';
 export class ClientListPage implements AfterViewInit {
   private clientService = inject(ClientService);
   private router = inject(Router);
+  private notification = inject(NotificationService);
 
   clients = signal<Client[]>([]);
 
@@ -81,6 +83,13 @@ export class ClientListPage implements AfterViewInit {
       this.clientService.deleteClient(id).subscribe({
         next: () => {
           this.loadClients();
+          this.notification.success(`Le client a été supprimé avec succès`);
+        },
+        error: (err) => {
+          console.error(err);
+          this.notification.error(
+            err.error?.message || 'Une erreur est survenue'
+          );
         },
       });
     }

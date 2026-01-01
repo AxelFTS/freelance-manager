@@ -19,10 +19,10 @@ export class MainLayout {
 
   isDesktop$ = this.breakpointObserver
     .observe([
-      Breakpoints.Tablet,
-      Breakpoints.Large,
-      Breakpoints.Web,
       Breakpoints.XLarge,
+      Breakpoints.Large,
+      Breakpoints.Medium,
+      Breakpoints.Small,
     ])
     .pipe(map((result) => result.matches));
 

@@ -9,7 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { ClientService } from '../../../../core/services/client.services';
+import { ClientService } from '../../../../core/services/client.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 @Component({
   selector: 'app-client-form-page',
   imports: [
@@ -26,6 +27,7 @@ export class ClientFormPage implements OnInit {
   private clientService = inject(ClientService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private notification = inject(NotificationService);
 
   clientForm!: FormGroup;
   isEditMode = false;
@@ -69,20 +71,32 @@ export class ClientFormPage implements OnInit {
 
       if (this.isEditMode) {
         this.clientService.updateClient(this.clientId!, clientData).subscribe({
-          next: () => {
+          next: (client) => {
             this.router.navigate(['/clients']);
+            this.notification.success(
+              `Le client '${client.nom}' a été modifié avec succès`
+            );
           },
           error: (err) => {
             console.error(err);
+            this.notification.error(
+              err.error?.message || 'Une erreur est survenue'
+            );
           },
         });
       } else {
         this.clientService.createClient(clientData).subscribe({
-          next: () => {
+          next: (client) => {
             this.router.navigate(['/clients']);
+            this.notification.success(
+              `Le client '${client.nom}' a été créé avec succès`
+            );
           },
           error: (err) => {
             console.error(err);
+            this.notification.error(
+              err.error?.message || 'Une erreur est survenue'
+            );
           },
         });
       }
