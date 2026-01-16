@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class ClientDTO {
 
     private Long id;
+    
     @Size(max = 100, message = "Le nom ne peut pas dépasser 100 caractères")
     @NotBlank(message = "Le nom est obligatoire")
     private String nom;
