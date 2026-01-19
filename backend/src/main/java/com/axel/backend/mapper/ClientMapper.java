@@ -11,6 +11,10 @@ import com.axel.backend.entity.Client;
 public class ClientMapper {
 
     public ClientDTO toDTO(Client client) {
+        if (client == null) {
+            return null;
+        }
+
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
         dto.setNom(client.getNom());
@@ -22,6 +26,10 @@ public class ClientMapper {
     }
 
     public Client toEntity (ClientDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
         Client client = new Client();
         client.setNom(dto.getNom());
         client.setEmail(dto.getEmail());
@@ -31,7 +39,11 @@ public class ClientMapper {
     }
 
     public List<ClientDTO> toDTOList(List<Client> clients) {
-        List<ClientDTO> dtos = new ArrayList<>(); 
+        if (clients == null) {
+            return null;
+        }
+
+        List<ClientDTO> dtos = new ArrayList<>();
 
         for (Client client : clients) {
             dtos.add(toDTO(client));
