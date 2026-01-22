@@ -17,7 +17,7 @@ import com.axel.backend.entity.LigneFacture;
 public class FactureMapper {
 
     // Facture Entity → FactureDTO
-    public static FactureDTO toDTO(Facture facture) {
+    public FactureDTO toDTO(Facture facture) {
         if (facture == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class FactureMapper {
         // Lignes mapping
         if (facture.getLignes() != null) {
             dto.setLignes(facture.getLignes().stream()
-                .map(FactureMapper::toDTO)
+                .map(this::toDTO)
                 .collect(Collectors.toList()));
         }
 
@@ -53,7 +53,7 @@ public class FactureMapper {
     }
 
     // LigneFacture Entity → LigneFactureDTO
-    public static LigneFactureDTO toDTO(LigneFacture ligne) {
+    public LigneFactureDTO toDTO(LigneFacture ligne) {
         if (ligne == null) {
             return null;
         }
@@ -69,7 +69,7 @@ public class FactureMapper {
     }
 
     // CreateFactureDTO → Facture Entity
-    public static Facture toEntity(CreateFactureDTO dto, Client client) {
+    public Facture toEntity(CreateFactureDTO dto, Client client) {
         if (dto == null) {
             return null;
         }
@@ -85,7 +85,7 @@ public class FactureMapper {
     }
 
     // CreateLigneFactureDTO → LigneFacture Entity
-    public static LigneFacture toEntity(CreateLigneFactureDTO dto, Facture facture) {
+    public LigneFacture toEntity(CreateLigneFactureDTO dto, Facture facture) {
         if (dto == null) {
             return null;
         }
@@ -100,13 +100,13 @@ public class FactureMapper {
     }
 
     // List<Facture> → List<FactureDTO>
-    public static List<FactureDTO> toDTOList(List<Facture> factures) {
+    public List<FactureDTO> toDTOList(List<Facture> factures) {
         if (factures == null) {
             return null;
         }
 
         return factures.stream()
-            .map(FactureMapper::toDTO)
+            .map(this::toDTO)
             .collect(Collectors.toList());
     }
 }
