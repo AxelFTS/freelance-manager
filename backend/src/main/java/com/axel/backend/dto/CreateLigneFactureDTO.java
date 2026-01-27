@@ -25,5 +25,5 @@ public class CreateLigneFactureDTO {
     @NotNull(message = "Le prix unitaire est obligatoire")
     private BigDecimal prixUnitaire;
 
-    public Object factureMapper;
+    private BigDecimal montantLigne;
 }

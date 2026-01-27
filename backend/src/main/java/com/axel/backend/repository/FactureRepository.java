@@ -15,5 +15,6 @@ public interface FactureRepository extends JpaRepository<Facture, Long> {
     public Optional<Facture> findByNumero(String numero);
 
     public Long countByNumeroStartingWith(String prefix);
-    
+
+    public Optional<Facture> findFirstByNumeroStartingWithOrderByNumeroDesc(String prefix);
 }

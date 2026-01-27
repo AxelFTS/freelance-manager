@@ -94,6 +94,7 @@ public class FactureMapper {
         ligne.setDescription(dto.getDescription());
         ligne.setQuantite(dto.getQuantite());
         ligne.setPrixUnitaire(dto.getPrixUnitaire());
+        ligne.setMontantLigne(dto.getMontantLigne());
         ligne.setFacture(facture);
 
         return ligne;

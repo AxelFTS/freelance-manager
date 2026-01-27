@@ -3,6 +3,7 @@ package com.axel.backend.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,11 +152,20 @@ public class FactureService {
 
     private String generateFactureNumero() {
         int year = LocalDateTime.now().getYear();
-
         String prefix = "FAC-" + year + "-";
-        Long count = factureRepository.countByNumeroStartingWith(prefix);
 
-        int numero = count.intValue() + 1;
-        return String.format("FAC-%d-%04d", year, numero);
+        // Récupérer la dernière facture de l'année
+        Optional<Facture> lastFacture = factureRepository.findFirstByNumeroStartingWithOrderByNumeroDesc(prefix);
+
+        int nextNumero = 1; // Par défaut, première facture de l'année
+
+        if (lastFacture.isPresent()) {
+            // Extraire le numéro du dernier numéro (ex: FAC-2026-0005 → 5)
+            String lastNumero = lastFacture.get().getNumero();
+            String numberPart = lastNumero.substring(lastNumero.lastIndexOf('-') + 1);
+            nextNumero = Integer.parseInt(numberPart) + 1;
+        }
+
+        return String.format("FAC-%d-%04d", year, nextNumero);
     }
 }
