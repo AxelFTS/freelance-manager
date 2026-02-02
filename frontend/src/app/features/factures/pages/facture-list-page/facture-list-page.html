@@ -1,1 +1,114 @@
-<p>facture-list-page works!</p>
+<div class="facture-list-container">
+  <!-- Header avec titre et bouton Nouvelle facture -->
+  <div class="header">
+    <h2>Liste des factures</h2>
+    <button mat-raised-button color="primary" (click)="newFacture()">
+      <mat-icon>add</mat-icon>
+      Nouvelle facture
+    </button>
+  </div>
+
+  <!-- Filtre par statut -->
+  <mat-form-field>
+    <mat-label>Filtrer par statut</mat-label>
+    <mat-select (selectionChange)="filterByStatut($event.value)">
+      <mat-option value="">Tous</mat-option>
+      <mat-option value="BROUILLON">Brouillon</mat-option>
+      <mat-option value="ENVOYEE">Envoyée</mat-option>
+      <mat-option value="PAYEE">Payée</mat-option>
+      <mat-option value="ANNULEE">Annulée</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Material Table avec tri et pagination -->
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Colonne Numéro -->
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Numéro</th>
+      <td mat-cell *matCellDef="let facture">{{ facture.numero }}</td>
+    </ng-container>
+
+    <!-- Colonne Client -->
+    <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+      <td mat-cell *matCellDef="let facture">{{ facture.clientNom }}</td>
+    </ng-container>
+
+    <!-- Colonne Date -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let facture">
+        {{ facture.dateFacture | date : "dd/MM/yyyy" }}
+      </td>
+    </ng-container>
+
+    <!-- Colonne Échéance -->
+    <ng-container matColumnDef="echeance">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Échéance</th>
+      <td mat-cell *matCellDef="let facture">
+        {{ facture.dateEcheance | date : "dd/MM/yyyy" }}
+      </td>
+    </ng-container>
+
+    <!-- Colonne Montant TTC -->
+    <ng-container matColumnDef="montantTTC">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Montant TTC</th>
+      <td mat-cell *matCellDef="let facture">
+        {{ facture.montantTTC | currency : "EUR" }}
+      </td>
+    </ng-container>
+
+    <!-- Colonne Statut avec chip coloré -->
+    <ng-container matColumnDef="statut">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+      <td mat-cell *matCellDef="let facture">
+        <mat-chip [ngClass]="'statut-' + facture.statut.toLowerCase()">
+          {{ facture.statut }}
+        </mat-chip>
+      </td>
+    </ng-container>
+
+    <!-- Colonne Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let facture">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="viewFacture(facture.id)"
+          aria-label="Voir"
+        >
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="editFacture(facture.id)"
+          aria-label="Modifier"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteFacture(facture.id)"
+          aria-label="Supprimer"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Définition des lignes du tableau -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <!-- Paginator pour la pagination -->
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    showFirstLastButtons
+    aria-label="Sélectionner une page"
+  >
+  </mat-paginator>
+</div>

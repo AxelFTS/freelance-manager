@@ -4,6 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   signal,
+  OnInit,
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -29,7 +30,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
   templateUrl: './client-list-page.html',
   styleUrl: './client-list-page.scss',
 })
-export class ClientListPage implements AfterViewInit {
+export class ClientListPage implements AfterViewInit, OnInit {
   private clientService = inject(ClientService);
   private router = inject(Router);
   private notification = inject(NotificationService);
