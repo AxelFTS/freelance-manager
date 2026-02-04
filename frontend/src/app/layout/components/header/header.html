@@ -1,13 +1,27 @@
 <mat-toolbar>
   <button
     matIconButton
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
+    class="example-icon menu-button"
+    aria-label="Toggle menu"
     (click)="onMenuClick()"
   >
     <mat-icon>menu</mat-icon>
   </button>
-  <span>Freelance Manager</span>
+
+  <span class="header-title">Freelance Manager</span>
+
   <span class="spacer-toolbar"></span>
-  <span>Logout</span>
+
+  <!-- Theme Toggle Button -->
+  <button
+    matIconButton
+    class="theme-toggle"
+    [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+    [matTooltip]="isDarkMode() ? 'Light Mode' : 'Dark Mode'"
+    (click)="toggleTheme()"
+  >
+    <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <span class="logout-button">Logout</span>
 </mat-toolbar>

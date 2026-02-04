@@ -1,15 +1,27 @@
 <mat-nav-list>
-  <a mat-list-item routerLink="/" routerLinkActive="active">
+  <a
+    mat-list-item
+    routerLink="/"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: true}">
     <mat-icon matListItemIcon>dashboard</mat-icon>
     <span matListItemTitle>Dashboard</span>
   </a>
 
-  <a mat-list-item routerLink="/clients" routerLinkActive="active">
+  <a
+    mat-list-item
+    routerLink="/clients"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: false}">
     <mat-icon matListItemIcon>people</mat-icon>
     <span matListItemTitle>Clients</span>
   </a>
 
-  <a mat-list-item routerLink="/factures" routerLinkActive="active">
+  <a
+    mat-list-item
+    routerLink="/factures"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: false}">
     <mat-icon matListItemIcon>receipt</mat-icon>
     <span matListItemTitle>Factures</span>
   </a>

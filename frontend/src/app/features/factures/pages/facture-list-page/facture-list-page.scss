@@ -1,0 +1,404 @@
+// ============================================================================
+// FACTURE LIST PAGE - Invoice Management with Status Chips
+// ============================================================================
+
+.facture-list-container {
+  padding: var(--space-8);
+  max-width: 1600px;
+  margin: 0 auto;
+  animation: fadeIn var(--transition-base) ease-out;
+}
+
+// ============================================================================
+// PAGE HEADER
+// ============================================================================
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    // Add invoice icon
+    &::before {
+      content: '📄';
+      font-size: var(--text-3xl);
+      filter: grayscale(20%);
+    }
+  }
+
+  button[mat-raised-button] {
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-semibold);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)) !important;
+    color: white !important;
+    border: none;
+    box-shadow: var(--shadow-md), var(--glow-primary);
+    transition: all var(--transition-base);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg), var(--glow-primary);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    mat-icon {
+      margin-right: var(--space-2);
+    }
+  }
+}
+
+// ============================================================================
+// FILTER SECTION
+// ============================================================================
+
+mat-form-field {
+  width: 280px;
+  margin-bottom: var(--space-6);
+  font-family: var(--font-body);
+
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-base);
+
+      &:hover {
+        border-color: var(--border-default);
+      }
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: transparent;
+    }
+
+    &.mat-focused {
+      .mat-mdc-text-field-wrapper {
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(var(--accent-primary-rgb), 0.1);
+      }
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow {
+      color: var(--text-primary);
+    }
+
+    .mat-mdc-floating-label {
+      color: var(--text-secondary);
+    }
+
+    &.mat-focused .mat-mdc-floating-label {
+      color: var(--accent-primary);
+    }
+  }
+}
+
+// ============================================================================
+// TABLE CONTAINER
+// ============================================================================
+
+table.mat-mdc-table {
+  width: 100%;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+
+  &.mat-elevation-z8 {
+    box-shadow: var(--shadow-md) !important;
+  }
+}
+
+// ============================================================================
+// TABLE HEADER
+// ============================================================================
+
+.mat-mdc-header-row {
+  background: linear-gradient(
+    135deg,
+    var(--bg-elevated),
+    var(--bg-higher)
+  );
+  border-bottom: 2px solid var(--border-default);
+
+  .mat-mdc-header-cell {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-4) var(--space-6);
+    border-right: 1px solid var(--border-subtle);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.mat-sort-header-sorted {
+      color: var(--accent-primary);
+    }
+  }
+}
+
+// ============================================================================
+// TABLE ROWS
+// ============================================================================
+
+.mat-mdc-row {
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--bg-elevated);
+    box-shadow: inset 4px 0 0 var(--accent-primary);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .mat-mdc-cell {
+    padding: var(--space-5) var(--space-6);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    border-right: 1px solid rgba(255, 255, 255, 0.02);
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
+// ============================================================================
+// SPECIFIC COLUMNS
+// ============================================================================
+
+// Invoice number - make it prominent
+.mat-column-numero {
+  font-family: 'Courier New', monospace;
+  font-weight: var(--font-bold);
+  color: var(--accent-primary);
+  letter-spacing: 0.05em;
+}
+
+// Client name
+.mat-column-client {
+  font-weight: var(--font-semibold);
+}
+
+// Dates
+.mat-column-date,
+.mat-column-echeance {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+}
+
+// Amount - make it stand out
+.mat-column-montantTTC {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-bold);
+  color: var(--status-success);
+}
+
+// ============================================================================
+// STATUS CHIPS
+// ============================================================================
+// Note: Status chip styles are now in global styles.scss for better specificity
+
+// ============================================================================
+// ACTION BUTTONS
+// ============================================================================
+
+.mat-column-actions {
+  .mat-mdc-icon-button {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    margin-right: var(--space-2);
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    .mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    // View button (visibility icon)
+    &:has(mat-icon[fontIcon="visibility"]) {
+      color: var(--accent-secondary);
+
+      &:hover {
+        background-color: rgba(210, 168, 255, 0.1);
+        transform: scale(1.1);
+      }
+    }
+
+    // Edit button
+    &[color="primary"] {
+      color: var(--accent-primary);
+
+      &:hover {
+        background-color: rgba(var(--accent-primary-rgb), 0.1);
+        transform: scale(1.1);
+      }
+    }
+
+    // Delete button
+    &[color="warn"] {
+      color: var(--status-error);
+
+      &:hover {
+        background-color: rgba(var(--status-error-rgb), 0.1);
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+// ============================================================================
+// PAGINATOR
+// ============================================================================
+
+mat-paginator {
+  margin-top: var(--space-6);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding: var(--space-4);
+
+  ::ng-deep {
+    .mat-mdc-paginator-container {
+      padding: 0;
+      min-height: 48px;
+    }
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+    }
+
+    .mat-mdc-icon-button {
+      color: var(--text-secondary);
+
+      &:hover {
+        background-color: var(--bg-elevated);
+        color: var(--accent-primary);
+      }
+
+      &[disabled] {
+        opacity: 0.3;
+      }
+    }
+
+    .mat-mdc-select {
+      color: var(--accent-primary);
+      font-weight: var(--font-medium);
+    }
+  }
+}
+
+// ============================================================================
+// STATISTICS SUMMARY (Optional - add to HTML if needed)
+// ============================================================================
+
+.invoice-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+
+  .stat-card {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    transition: all var(--transition-base);
+
+    &:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-label {
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-2);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      color: var(--accent-primary);
+    }
+  }
+}
+
+// ============================================================================
+// RESPONSIVE DESIGN
+// ============================================================================
+
+@media (max-width: 968px) {
+  .facture-list-container {
+    padding: var(--space-4);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+
+    h2 {
+      font-size: var(--text-2xl);
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  // Hide less important columns on mobile
+  .mat-column-echeance,
+  .mat-column-date {
+    display: none;
+  }
+}
