@@ -118,6 +118,8 @@ npm start
 ## 📸 Screenshots
 
 <img width="2226" height="1080" alt="factures" src="https://github.com/user-attachments/assets/d793141f-296a-4d01-a508-f6dce741abd1" />
+
+
 <img width="2224" height="1081" alt="Clients" src="https://github.com/user-attachments/assets/d8a85437-3f6b-40b6-9fb0-763230dd24c0" />
 
 ---
@@ -191,4 +193,5 @@ git commit -m "fix: tax calculation error"
 git commit -m "chore: setup Docker PostgreSQL"  
 git commit -m "docs: update README"  
 git commit -m "refactor: clean Client service"
+
 
