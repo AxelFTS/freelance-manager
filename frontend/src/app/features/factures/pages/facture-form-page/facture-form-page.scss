@@ -1,0 +1,595 @@
+// ============================================================================
+// FACTURE FORM — "Precision Ledger" Dark Editorial
+// ============================================================================
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(63, 180, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(63, 180, 255, 0.35);
+  }
+}
+
+@keyframes accentGrow {
+  from {
+    width: 0;
+  }
+  to {
+    width: 72px;
+  }
+}
+
+// ============================================================================
+// HOST
+// ============================================================================
+
+:host {
+  display: block;
+  padding: var(--space-8) var(--space-8) var(--space-16);
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+// ============================================================================
+// PAGE TITLE
+// ============================================================================
+
+span {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: var(--space-10);
+  padding-bottom: var(--space-5);
+  position: relative;
+
+  // Subtle full-width rule
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-primary) 0%,
+      rgba(210, 168, 255, 0.4) 40%,
+      transparent 100%
+    );
+  }
+
+  // Animated accent bar
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 3px;
+    width: 72px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-primary),
+      var(--accent-secondary)
+    );
+    border-radius: 2px;
+    animation: accentGrow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+}
+
+// ============================================================================
+// FORM LAYOUT
+// ============================================================================
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+// ============================================================================
+// FORM SECTIONS — Panel style with left accent border
+// ============================================================================
+
+.form-section {
+  position: relative;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  &:nth-child(1) {
+    animation-delay: 0.05s;
+    border-left-color: var(--accent-primary);
+  }
+  &:nth-child(2) {
+    animation-delay: 0.12s;
+    border-left-color: var(--accent-secondary);
+  }
+
+  // Ambient top glow
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(63, 180, 255, 0.3) 40%,
+      rgba(210, 168, 255, 0.2) 70%,
+      transparent 100%
+    );
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-6);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-primary),
+        var(--accent-secondary)
+      );
+    }
+  }
+}
+
+// ============================================================================
+// ANGULAR MATERIAL FIELD OVERRIDES
+// ============================================================================
+
+mat-form-field {
+  display: block;
+  width: 100%;
+  margin-bottom: var(--space-5);
+
+  ::ng-deep {
+    // Remove native underline artifacts
+    .mat-mdc-form-field-subscript-wrapper {
+      margin-top: var(--space-1);
+    }
+
+    .mat-mdc-form-field-focus-overlay,
+    .mdc-line-ripple {
+      display: none;
+    }
+
+    // Field wrapper
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--bg-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-lg) !important;
+      transition: border-color 200ms, background-color 200ms, box-shadow 200ms;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+
+    // Input
+    .mat-mdc-input-element,
+    .mat-mdc-select-trigger {
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      padding: var(--space-4) var(--space-4) !important;
+      caret-color: var(--accent-primary);
+    }
+
+    // Label
+    .mat-mdc-floating-label {
+      color: var(--text-tertiary);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      left: var(--space-4) !important;
+    }
+
+    // Focused
+    &.mat-focused {
+      .mat-mdc-text-field-wrapper {
+        border-color: rgba(63, 180, 255, 0.5);
+        background-color: var(--bg-surface);
+        box-shadow: 0 0 0 3px rgba(63, 180, 255, 0.08),
+          inset 0 1px 0 rgba(63, 180, 255, 0.1);
+      }
+
+      .mat-mdc-floating-label {
+        color: var(--accent-primary) !important;
+      }
+    }
+
+    // Invalid
+    &.mat-form-field-invalid {
+      .mat-mdc-text-field-wrapper {
+        border-color: rgba(248, 81, 73, 0.5);
+        box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.08);
+      }
+    }
+
+    // Error text
+    .mat-mdc-form-field-error {
+      color: var(--status-error);
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+
+    // Select arrow
+    .mat-mdc-select-arrow {
+      color: var(--text-tertiary);
+    }
+
+    // Datepicker icon
+    .mat-datepicker-toggle {
+      color: var(--text-tertiary);
+    }
+  }
+}
+
+// ============================================================================
+// TWO COLUMN GRID
+// ============================================================================
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================================================
+// LIGNE ROWS — Ledger / spreadsheet aesthetic
+// ============================================================================
+
+.ligne-row {
+  display: grid;
+  grid-template-columns: 1fr 90px 120px 120px 40px;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--bg-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-2);
+  transition: border-color 200ms, background-color 200ms;
+
+  // Ledger left tag
+  border-left: 2px solid transparent;
+
+  &:hover {
+    background-color: var(--bg-higher);
+    border-left-color: var(--accent-primary);
+    border-color: rgba(63, 180, 255, 0.12);
+  }
+
+  mat-form-field {
+    margin-bottom: 0;
+
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        background-color: transparent;
+        border-color: transparent;
+        border-radius: var(--radius-md) !important;
+      }
+
+      &.mat-focused .mat-mdc-text-field-wrapper {
+        background-color: var(--bg-surface);
+        border-color: rgba(63, 180, 255, 0.4);
+      }
+
+      .mat-mdc-input-element {
+        font-size: var(--text-sm);
+        padding: var(--space-2) var(--space-3) !important;
+      }
+
+      .mat-mdc-floating-label {
+        font-size: 11px;
+        left: var(--space-3) !important;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+
+    .field-description {
+      grid-column: 1 / -1;
+    }
+    .btn-delete {
+      justify-self: end;
+    }
+  }
+}
+
+// ============================================================================
+// DELETE BUTTON
+// ============================================================================
+
+.btn-delete {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms;
+  align-self: center;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: rgba(248, 81, 73, 0.1);
+    border-color: rgba(248, 81, 73, 0.3);
+    color: var(--status-error);
+  }
+
+  &[disabled] {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================================================
+// ADD LINE BUTTON
+// ============================================================================
+
+.btn-add-ligne {
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  background: transparent;
+  border: 1px dashed rgba(63, 180, 255, 0.25);
+  border-radius: var(--radius-lg);
+  color: var(--accent-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: all 250ms;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  &:hover {
+    background: rgba(63, 180, 255, 0.05);
+    border-color: rgba(63, 180, 255, 0.5);
+    border-style: solid;
+
+    mat-icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+// ============================================================================
+// RECAP — Hero totals card
+// ============================================================================
+
+.recap {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-top: 2px solid var(--accent-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  margin-left: auto;
+  min-width: 320px;
+  max-width: 400px;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+
+  // Corner glow
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(
+      circle at top right,
+      rgba(63, 180, 255, 0.06) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+}
+
+.recap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-body);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  span:first-child {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+
+  span:last-child {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.recap-total {
+  border-top: 1px solid var(--accent-primary) !important;
+  margin-top: var(--space-2);
+  padding-top: var(--space-4) !important;
+
+  span:first-child {
+    font-family: var(--font-display);
+    font-size: var(--text-sm) !important;
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  span:last-child {
+    font-family: var(--font-display);
+    font-size: 1.4rem !important;
+    font-weight: 800 !important;
+    color: var(--accent-primary) !important;
+    letter-spacing: -0.02em;
+  }
+}
+
+// ============================================================================
+// FORM ACTIONS
+// ============================================================================
+
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+
+  button {
+    flex: 1;
+    height: 52px;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+
+    // Submit
+    &[type="submit"]:not([disabled]) {
+      background: linear-gradient(
+        135deg,
+        var(--accent-primary) 0%,
+        var(--accent-secondary) 100%
+      );
+      color: #0a0e14;
+      box-shadow: 0 4px 20px rgba(63, 180, 255, 0.25);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(63, 180, 255, 0.4);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    // Submit disabled
+    &[type="submit"][disabled] {
+      background: var(--bg-elevated);
+      color: var(--text-tertiary);
+      cursor: not-allowed;
+      border: 1px solid var(--border-subtle);
+    }
+
+    // Cancel
+    &[type="button"] {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      flex: 0 0 140px;
+
+      &:hover {
+        background-color: var(--bg-elevated);
+        color: var(--text-primary);
+        border-color: var(--border-default);
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column-reverse;
+
+    button[type="button"] {
+      flex: 1;
+    }
+  }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+@media (max-width: 768px) {
+  :host {
+    padding: var(--space-4) var(--space-4) var(--space-12);
+  }
+
+  .form-section {
+    padding: var(--space-6);
+  }
+
+  .recap {
+    min-width: unset;
+    max-width: 100%;
+  }
+}

@@ -1,1 +1,132 @@
-<p>facture-form-page works!</p>
+<span>{{ isEditMode ? 'Modifier la facture' : 'Créer une facture' }}</span>
+
+<form [formGroup]="factureForm" (ngSubmit)="onSubmit()">
+
+  <!-- ===== SECTION 1 : INFORMATIONS PRINCIPALES ===== -->
+  <div class="form-section">
+    <div class="section-title">Informations générales</div>
+
+    <mat-form-field>
+      <mat-label>Client</mat-label>
+      <mat-select formControlName="clientId">
+        @for (client of clients; track client.id) {
+          <mat-option [value]="client.id">{{ client.nom }}</mat-option>
+        }
+      </mat-select>
+      @if (factureForm.get('clientId')?.hasError('required') && factureForm.get('clientId')?.touched) {
+        <mat-error>Le client est obligatoire</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field>
+        <mat-label>Date de facture</mat-label>
+        <input matInput [matDatepicker]="pickerFacture" formControlName="dateFacture" />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerFacture" />
+        <mat-datepicker #pickerFacture />
+        @if (factureForm.get('dateFacture')?.hasError('required') && factureForm.get('dateFacture')?.touched) {
+          <mat-error>La date de facture est obligatoire</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Date d'échéance</mat-label>
+        <input matInput [matDatepicker]="pickerEcheance" formControlName="dateEcheance" />
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEcheance" />
+        <mat-datepicker #pickerEcheance />
+        @if (factureForm.get('dateEcheance')?.hasError('required') && factureForm.get('dateEcheance')?.touched) {
+          <mat-error>La date d'échéance est obligatoire</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="field-tva">
+      <mat-label>Taux TVA (%)</mat-label>
+      <input matInput type="number" formControlName="tauxTVA" />
+      @if (factureForm.get('tauxTVA')?.hasError('required') && factureForm.get('tauxTVA')?.touched) {
+        <mat-error>Le taux TVA est obligatoire</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </div>
+
+  <!-- ===== SECTION 2 : LIGNES DE FACTURE ===== -->
+  <div class="form-section">
+    <div class="section-title">Lignes de facture</div>
+
+    <div formArrayName="lignes">
+      @for (ligne of lignes.controls; track $index) {
+        <div class="ligne-row" [formGroupName]="$index">
+
+          <mat-form-field class="field-description">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description" />
+            @if (ligne.get('description')?.hasError('required') && ligne.get('description')?.touched) {
+              <mat-error>Obligatoire</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field class="field-small">
+            <mat-label>Quantité</mat-label>
+            <input matInput type="number" formControlName="quantite"
+              (input)="updateMontantLigne($index)" />
+          </mat-form-field>
+
+          <mat-form-field class="field-small">
+            <mat-label>Prix unitaire (€)</mat-label>
+            <input matInput type="number" formControlName="prixUnitaire"
+              (input)="updateMontantLigne($index)" />
+          </mat-form-field>
+
+          <mat-form-field class="field-small">
+            <mat-label>Montant (€)</mat-label>
+            <input matInput formControlName="montantLigne" readonly />
+          </mat-form-field>
+
+          <button mat-icon-button type="button" class="btn-delete"
+            (click)="removeLigne($index)"
+            [disabled]="lignes.length === 1">
+            <mat-icon>delete</mat-icon>
+          </button>
+
+        </div>
+      }
+    </div>
+
+    <button mat-button type="button" class="btn-add-ligne" (click)="addLigne()">
+      <mat-icon>add</mat-icon>
+      Ajouter une ligne
+    </button>
+  </div>
+
+  <!-- ===== SECTION 3 : RÉCAPITULATIF ===== -->
+  <div class="recap">
+    <div class="recap-row">
+      <span>Total HT</span>
+      <span>{{ totalHT | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+    <div class="recap-row">
+      <span>TVA ({{ factureForm.get('tauxTVA')?.value }}%)</span>
+      <span>{{ montantTVA | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+    <div class="recap-row recap-total">
+      <span>Total TTC</span>
+      <span>{{ totalTTC | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <!-- ===== BOUTONS ===== -->
+  <div class="form-actions">
+    <button matButton="tonal" type="submit" [disabled]="factureForm.invalid">
+      {{ isEditMode ? 'Modifier' : 'Créer' }}
+    </button>
+    <button matButton="tonal" type="button" (click)="onCancel()">
+      Annuler
+    </button>
+  </div>
+
+</form>
