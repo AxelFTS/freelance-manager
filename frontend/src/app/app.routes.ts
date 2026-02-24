@@ -5,6 +5,7 @@ import { ClientFormPage } from './features/clients/pages/client-form-page/client
 import { MainLayout } from './layout/components/main-layout/main-layout';
 import { FactureListPage } from './features/factures/pages/facture-list-page/facture-list-page';
 import { FactureFormPage } from './features/factures/pages/facture-form-page/facture-form-page';
+import { FactureDetailPage } from './features/factures/pages/facture-detail-page/facture-detail-page';
 export const routes: Routes = [
   {
     path: '',
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: 'factures', component: FactureListPage },
       { path: 'factures/new', component: FactureFormPage },
       { path: 'factures/:id/edit', component: FactureFormPage },
+      { path: 'factures/:id', component: FactureDetailPage },
     ],
   },
   { path: '**', redirectTo: '' },

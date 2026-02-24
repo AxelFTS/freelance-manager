@@ -42,8 +42,8 @@ export class FactureService {
 
   updateStatut(id: number, statut: StatutFacture): Observable<Facture> {
     return this.http.patch<Facture>(
-      this.url + 'factures/' + id + '/statut',
-      statut
+      `${this.url}factures/${id}/statut?statut=${statut}`,
+      null
     );
   }
 }

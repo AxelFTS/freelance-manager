@@ -1,0 +1,146 @@
+@if (facture) {
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="page-header">
+    <div class="header-top">
+      <button class="btn-back" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Factures</span>
+      </button>
+      <span class="statut-badge statut-{{ facture.statut }}">{{ facture.statut }}</span>
+    </div>
+
+    <div class="header-main">
+      <h1 class="invoice-number">{{ facture.numero }}</h1>
+      <p class="invoice-client">{{ facture.clientNom }}</p>
+    </div>
+
+    <div class="action-toolbar">
+      <button class="btn-action btn-secondary" (click)="goToEdit()">
+        <mat-icon>edit</mat-icon>
+        Modifier
+      </button>
+
+      @if (facture.statut === 'BROUILLON') {
+        <button class="btn-action btn-primary" (click)="changeStatut('ENVOYEE')">
+          <mat-icon>send</mat-icon>
+          Marquer envoyée
+        </button>
+        <button class="btn-action btn-danger" (click)="changeStatut('ANNULEE')">
+          <mat-icon>cancel</mat-icon>
+          Annuler
+        </button>
+      }
+
+      @if (facture.statut === 'ENVOYEE') {
+        <button class="btn-action btn-success" (click)="changeStatut('PAYEE')">
+          <mat-icon>check_circle</mat-icon>
+          Marquer payée
+        </button>
+        <button class="btn-action btn-danger" (click)="changeStatut('ANNULEE')">
+          <mat-icon>cancel</mat-icon>
+          Annuler
+        </button>
+      }
+
+      <button class="btn-action btn-ghost" disabled>
+        <mat-icon>picture_as_pdf</mat-icon>
+        Télécharger PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== CONTENT ===== -->
+  <div class="detail-content">
+
+    <!-- Section 1 — Informations générales -->
+    <section class="detail-section section-primary">
+      <p class="section-title">Informations générales</p>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Client</span>
+          <span class="info-value info-highlight">{{ facture.clientNom }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Numéro de facture</span>
+          <span class="info-value mono">{{ facture.numero }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date de facture</span>
+          <span class="info-value">{{ facture.dateFacture | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date d'échéance</span>
+          <span class="info-value">{{ facture.dateEcheance | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Taux TVA</span>
+          <span class="info-value mono">{{ facture.tauxTVA }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Créé le</span>
+          <span class="info-value">{{ facture.createdAt | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 — Lignes de facture -->
+    <section class="detail-section section-secondary">
+      <p class="section-title">Lignes de facture</p>
+      <div class="lignes-table-wrapper">
+        <table class="lignes-table">
+          <thead>
+            <tr>
+              <th class="col-description">Description</th>
+              <th class="col-number">Quantité</th>
+              <th class="col-number">Prix unitaire</th>
+              <th class="col-number">Montant HT</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (ligne of facture.lignes; track ligne.id; let even = $even) {
+              <tr [class.row-even]="even">
+                <td class="cell-description">{{ ligne.description }}</td>
+                <td class="cell-number">{{ ligne.quantite }}</td>
+                <td class="cell-number mono">{{ ligne.prixUnitaire | currency:'EUR':'symbol':'1.2-2' }}</td>
+                <td class="cell-number mono cell-amount">{{ ligne.montantLigne | currency:'EUR':'symbol':'1.2-2' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3 — Notes -->
+    @if (facture.notes) {
+      <section class="detail-section section-notes">
+        <p class="section-title">Notes</p>
+        <p class="notes-content">{{ facture.notes }}</p>
+      </section>
+    }
+
+    <!-- Section 4 — Totaux -->
+    <div class="recap">
+      <div class="recap-row">
+        <span>Total HT</span>
+        <span>{{ facture.montantHT | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+      <div class="recap-row">
+        <span>TVA ({{ facture.tauxTVA }}%)</span>
+        <span>{{ facture.montantTVA | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+      <div class="recap-row recap-total">
+        <span>Total TTC</span>
+        <span>{{ facture.montantTTC | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+
+  </div>
+
+} @else {
+  <!-- Loading state -->
+  <div class="skeleton-wrapper">
+    <div class="skeleton skeleton-title"></div>
+    <div class="skeleton skeleton-block"></div>
+    <div class="skeleton skeleton-block"></div>
+  </div>
+}

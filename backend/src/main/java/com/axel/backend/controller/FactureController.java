@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,7 +58,7 @@ public class FactureController {
     }
 
     @PatchMapping("/{id}/statut")
-    public ResponseEntity<FactureDTO> updateStatut(@PathVariable Long id, @RequestBody StatutFacture statut) {
+    public ResponseEntity<FactureDTO> updateStatut(@PathVariable Long id, @RequestParam StatutFacture statut) {
         FactureDTO factureDTO = factureService.updateStatut(id, statut);
         return ResponseEntity.status(200).body(factureDTO);
     }
