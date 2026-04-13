@@ -1,1 +1,151 @@
-<p>dashboard-page works!</p>
+<div class="dashboard-container">
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="dashboard-header">
+    <div class="header-title">
+      <h1>Dashboard</h1>
+      <div class="accent-bar"></div>
+    </div>
+    <p class="subtitle">Vue d'ensemble · 2026</p>
+  </header>
+
+  <!-- ===== KPI CARDS ===== -->
+  @if (overview) {
+    <div class="stats-grid">
+
+      <div class="stat-card card-clients">
+        <div class="stat-header">
+          <div class="stat-info">
+            <p class="stat-label">Clients</p>
+            <p class="stat-value">{{ overview.totalClients }}</p>
+          </div>
+          <div class="stat-icon">👥</div>
+        </div>
+        <div class="stat-footer">
+          <span>Total clients actifs</span>
+        </div>
+      </div>
+
+      <div class="stat-card card-invoices">
+        <div class="stat-header">
+          <div class="stat-info">
+            <p class="stat-label">Factures</p>
+            <p class="stat-value">{{ overview.totalFactures }}</p>
+          </div>
+          <div class="stat-icon">🧾</div>
+        </div>
+        <div class="stat-footer">
+          <span>{{ overview.totalFacturePayees }} payées</span>
+        </div>
+      </div>
+
+      <div class="stat-card card-revenue">
+        <div class="stat-header">
+          <div class="stat-info">
+            <p class="stat-label">CA du mois</p>
+            <p class="stat-value">{{ overview.chiffreAffaireMois | currency:'EUR':'symbol':'1.0-0' }}</p>
+          </div>
+          <div class="stat-icon">💰</div>
+        </div>
+        <div class="stat-footer">
+          <span>Année : {{ overview.chiffreAffairesAnnee | currency:'EUR':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card card-pending">
+        <div class="stat-header">
+          <div class="stat-info">
+            <p class="stat-label">En attente</p>
+            <p class="stat-value">{{ overview.facturesEnAttente }}</p>
+          </div>
+          <div class="stat-icon">⏳</div>
+        </div>
+        <div class="stat-footer">
+          <span>{{ overview.montantEnAttente | currency:'EUR':'symbol':'1.0-0' }} à encaisser</span>
+        </div>
+      </div>
+
+    </div>
+  } @else {
+    <div class="stats-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="stat-card skeleton-card">
+          <div class="skeleton skeleton-label"></div>
+          <div class="skeleton skeleton-value"></div>
+          <div class="skeleton skeleton-footer"></div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ===== GRAPHIQUE CA MENSUEL ===== -->
+  <div class="dashboard-card chart-section">
+    <div class="card-header">
+      <h3>Évolution du CA</h3>
+    </div>
+    <div class="card-body">
+      @if (chartData.length > 0) {
+        <div class="chart-container">
+          <ngx-charts-line-chart
+            [results]="chartData"
+            [xAxis]="true"
+            [yAxis]="true"
+            [gradient]="true"
+            [showXAxisLabel]="false"
+            [showYAxisLabel]="false"
+            [autoScale]="true"
+            [scheme]="colorScheme">
+          </ngx-charts-line-chart>
+        </div>
+      } @else {
+        <div class="empty-chart">
+          <p>Aucune donnée disponible</p>
+          <span>Les données s'afficheront une fois des factures payées enregistrées</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- ===== DERNIÈRES FACTURES ===== -->
+  <div class="dashboard-card factures-section">
+    <div class="card-header">
+      <h3>Dernières factures</h3>
+    </div>
+    <div class="card-body">
+      @if (dernieresFactures.length > 0) {
+        <div class="factures-table-wrapper">
+          <table class="factures-table">
+            <thead>
+              <tr>
+                <th>Numéro</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th class="col-right">Montant TTC</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (facture of dernieresFactures; track facture.id) {
+                <tr class="facture-row" (click)="goToFacture(facture.id)">
+                  <td class="mono">{{ facture.numero }}</td>
+                  <td>{{ facture.clientNom }}</td>
+                  <td>{{ facture.dateFacture | date:'dd/MM/yyyy' }}</td>
+                  <td class="mono col-right">{{ facture.montantTTC | currency:'EUR':'symbol':'1.2-2' }}</td>
+                  <td>
+                    <span class="statut-badge statut-{{ facture.statut }}">{{ facture.statut }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p class="empty-icon">🧾</p>
+          <p>Aucune facture récente</p>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>
